@@ -8,7 +8,7 @@ const Cart = () => {
   const [isOpen, toggleOpen] = useCycle(false, true);
   const cartQty = useStore((state) => {
     return state.cartItemIds.reduce((acc, id) => {
-      acc += state.cartItems[id].qty;
+      acc += state.cartItems[id].quantity;
       return acc;
     }, 0);
   });
@@ -18,7 +18,7 @@ const Cart = () => {
     if (isOpen) {
       body.overflowY = "hidden";
     } else {
-      body.overflowY = "scroll";
+      body.overflowY = "auto";
     }
   }, [isOpen]);
 

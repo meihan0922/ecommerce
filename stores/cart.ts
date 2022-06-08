@@ -6,7 +6,7 @@ import { IProducts, IBanner, CartStatus } from "@/types/Home";
 type keyString = keyof typeof CartStatus;
 export interface ICartItemData extends IProducts {
   status: typeof CartStatus[keyString];
-  qty: number;
+  quantity: number;
 }
 
 export interface ICartState {
@@ -16,6 +16,7 @@ export interface ICartState {
   removeCartItemById: (id: string) => void;
   addCartItem: (id: string, obj: ICartItemData) => void;
   updateQty: (id: string, type: "add" | "sub") => void;
+  clearAll: () => void;
 }
 
 export const createCartSlice = (
@@ -72,10 +73,15 @@ export const createCartSlice = (
       }
       return prev;
     }),
+  clearAll: () =>
+    set(() => ({
+      cartItemIds: [],
+      cartItems: {},
+    })),
   updateQty: (id: string, type: "add" | "sub") =>
     set((prev) => {
       if (prev.cartItemIds.includes(id)) {
-        let qty = prev.cartItems[id].qty;
+        let qty = prev.cartItems[id].quantity;
         if (type === "add") {
           ++qty;
         } else if (type === "sub" && qty > 2) {
@@ -84,7 +90,7 @@ export const createCartSlice = (
         const nextCartItems = update(prev.cartItems, {
           [id]: {
             $merge: {
-              qty,
+              quantity: qty,
             },
           },
         });

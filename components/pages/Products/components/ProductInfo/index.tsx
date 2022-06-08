@@ -15,19 +15,18 @@ const ProductInfo = ({ product }: { product: IProducts }) => {
   const [qty, setQty] = useState(1);
   const { name, details, price, _id } = product;
   const addCartItem = useStore((state) => state.addCartItem);
+  const cartItems = useStore((state) => state.cartItems);
 
   const handleAddCart = () => {
     toast.success(`${qty} ${product.name} added to the cart.`);
     addCartItem(_id, {
-      qty,
+      quantity: qty,
       status: CartStatus.BETTING,
       ...product,
     });
   };
 
-  const handleBuyNow = () => {
-    toast.loading("Redirecting...");
-  };
+  const handleBuyNow = () => {};
 
   const add = () => setQty((prev) => ++prev);
   const sub = () => setQty((prev) => --prev);
