@@ -1,25 +1,21 @@
 import type { SetState, GetState } from "zustand";
 import update from "immutability-helper";
 import { GlobalStoreState } from ".";
+import { IProducts, IBanner, CartStatus } from "@/types/Home";
 
-export enum CartStatus {
-  SOLD_OUT = 0,
-  BETTING = 1,
-  ERROR = 2,
-}
-
-export interface ICartItemData {
-  cartId: string;
-  status: string;
+type keyString = keyof typeof CartStatus;
+export interface ICartItemData extends IProducts {
+  status: typeof CartStatus[keyString];
   qty: number;
 }
 
 export interface ICartState {
   cartItems: { [key: string]: ICartItemData };
-  cartItemIds: Set<string>;
+  cartItemIds: Array<string>;
   updateCartItem: (id: string, key: string, value: number) => void;
   removeCartItemById: (id: string) => void;
   addCartItem: (id: string, obj: ICartItemData) => void;
+  updateQty: (id: string, type: "add" | "sub") => void;
 }
 
 export const createCartSlice = (
@@ -27,24 +23,35 @@ export const createCartSlice = (
   get: GetState<GlobalStoreState>
 ) => ({
   cartItems: {},
-  cartItemIds: new Set() as Set<string>,
+  cartItemIds: [],
   addCartItem: (id: string, obj: ICartItemData) => {
     set((prev) => {
+      console.log("????", prev.cartItemIds);
       const nextCartItems = update(prev.cartItems, {
         $merge: {
           [id]: obj,
         },
       });
-      const nextCartItemIds = update(prev.cartItemIds, { $add: [id] });
-      return {
-        cartItemIds: nextCartItemIds,
-        cartItems: nextCartItems,
-      };
+      if (prev.cartItemIds.includes(id)) {
+        return {
+          cartItems: nextCartItems,
+          cartItemIds: prev.cartItemIds,
+        };
+      } else {
+        const nextCartItemIds = update(prev.cartItemIds, { $push: [id] });
+        return {
+          cartItemIds: nextCartItemIds,
+          cartItems: nextCartItems,
+        };
+      }
     });
   },
   removeCartItemById: (id: string) =>
     set((prev) => {
-      const nextCartItemIds = update(prev.cartItemIds, { $remove: [id] });
+      const findKeyIndex = prev.cartItemIds.indexOf(id);
+      const nextCartItemIds = update(prev.cartItemIds, {
+        $splice: [[findKeyIndex, 1]],
+      });
       const nextCartItems = update(prev.cartItems, { $unset: [id] });
       return {
         cartItemIds: nextCartItemIds,
@@ -53,10 +60,32 @@ export const createCartSlice = (
     }),
   updateCartItem: (id: string, key: string, value: number) =>
     set((prev) => {
-      if (prev.cartItemIds.has(id)) {
+      if (prev.cartItemIds.includes(id)) {
         const nextCartItems = update(prev.cartItems, {
           [id]: {
             $merge: { [key]: value },
+          },
+        });
+        return {
+          cartItems: nextCartItems,
+        };
+      }
+      return prev;
+    }),
+  updateQty: (id: string, type: "add" | "sub") =>
+    set((prev) => {
+      if (prev.cartItemIds.includes(id)) {
+        let qty = prev.cartItems[id].qty;
+        if (type === "add") {
+          ++qty;
+        } else if (type === "sub" && qty > 2) {
+          --qty;
+        }
+        const nextCartItems = update(prev.cartItems, {
+          [id]: {
+            $merge: {
+              qty,
+            },
           },
         });
         return {

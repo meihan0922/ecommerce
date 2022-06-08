@@ -1,6 +1,6 @@
-import { Image, Slug } from "@sanity/types";
+import { Image, Slug, SanityDocument } from "@sanity/types";
 
-export interface IProducts {
+export interface IProducts extends SanityDocument {
   details: string;
   image: Image[];
   name: string;
@@ -8,7 +8,7 @@ export interface IProducts {
   slug: Slug;
 }
 
-export interface IBanner {
+export interface IBanner extends SanityDocument {
   image: Image;
   buttonText: string;
   product: string;
@@ -20,3 +20,9 @@ export interface IBanner {
   largeText1: string;
   largeText2: string;
 }
+
+export const CartStatus = {
+  SOLD_OUT: 0,
+  BETTING: 1,
+  ERROR: 2,
+} as const;

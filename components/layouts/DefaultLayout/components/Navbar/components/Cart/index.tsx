@@ -1,54 +1,43 @@
-import * as React from "react";
-import { useRef } from "react";
+import { useEffect } from "react";
 import { motion, useCycle } from "framer-motion";
-import { useDimensions } from "@/hooks/useDimensions";
 import { Menu } from "./components/Menu";
 import { AiOutlineShopping } from "react-icons/ai";
+import { useStore } from "@/stores";
 
-const sidebar = {
-  open: (height = 1000) => ({
-    clipPath: `circle(${height * 2 + 200}px at 260px 30px)`,
-    transition: {
-      type: "spring",
-      stiffness: 20,
-      restDelta: 2,
-    },
-  }),
-  closed: {
-    clipPath: "circle(30px at 260px 30px)",
-    transition: {
-      delay: 0.5,
-      type: "spring",
-      stiffness: 400,
-      damping: 40,
-    },
-  },
-};
-
-const Example = () => {
+const Cart = () => {
   const [isOpen, toggleOpen] = useCycle(false, true);
-  const containerRef = useRef(null);
-  const { height } = useDimensions(containerRef);
+  const cartQty = useStore((state) => {
+    return state.cartItemIds.reduce((acc, id) => {
+      acc += state.cartItems[id].qty;
+      return acc;
+    }, 0);
+  });
+
+  useEffect(() => {
+    const body = document.querySelector("body").style;
+    if (isOpen) {
+      body.overflowY = "hidden";
+    } else {
+      body.overflowY = "scroll";
+    }
+  }, [isOpen]);
 
   return (
     <motion.nav
       initial={false}
       animate={isOpen ? "open" : "closed"}
-      custom={height}
-      ref={containerRef}
       className="absolute right-0 top-0"
     >
-      <motion.div
-        className="z-10 absolute top-0 right-0 bottom-0 w-[300px] h-screen bg-slate-300"
-        variants={sidebar}
-      />
-      <Menu />
+      <div style={{ pointerEvents: isOpen ? "auto" : "none" }}>
+        <Menu toggleOpen={toggleOpen} />
+      </div>
       <button
-        className="z-10 absolute right-4 top-2 rounded-[50%]"
+        className="z-30 absolute right-4 top-2 rounded-[50%]"
+        // toggleOpen的型態導致不能寫成onClick={toggle}
         onClick={() => toggleOpen()}
       >
         <div className="rounded-full w-4 h-4 text-white bg-primary absolute -top-1 -right-1.5 text-xs">
-          1
+          {cartQty}
         </div>
         <AiOutlineShopping size={40} />
       </button>
@@ -56,4 +45,4 @@ const Example = () => {
   );
 };
 
-export default Example;
+export default Cart;

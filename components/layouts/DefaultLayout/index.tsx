@@ -12,7 +12,7 @@ const Layout = ({ children }: { children: any }) => {
       <header>
         <Navbar />
       </header>
-      <main className="max-w-7xl m-auto w-full pt-14">{children}</main>
+      <main className="max-w-7xl m-auto w-full pt-[60px]">{children}</main>
       <footer>
         <Footer />
       </footer>
