@@ -32,9 +32,9 @@ const ProductInfo = ({ product }: { product: IProducts }) => {
   const sub = () => setQty((prev) => --prev);
 
   return (
-    <div className="flex flex-1 flex-col justify-between h-[400px]">
+    <div className="px-3 md:px-0 flex flex-1 flex-col justify-between md:flex-auto">
       <div>
-        <h3 className="text-4xl font-extrabold ">{name}</h3>
+        <h3 className="text-3xl md:text-4xl font-extrabold ">{name}</h3>
         <div className="w-full text-primary mt-2.5 flex gap-1 items-center">
           <div className="flex">
             <AiFillStar />
@@ -72,9 +72,9 @@ const ProductInfo = ({ product }: { product: IProducts }) => {
             </div>
           </div>
         </div>
-        <div className="flex gap-7 justify-end mt-10">
+        <div className="flex gap-2 mt-5 md:gap-3 justify-between md:justify-end md:mt-10">
           <motion.button
-            className="px-1.5 py-4 border border-primary text-lg font-medium bg-white text-primary cursor-pointer w-36 md:w-52"
+            className="px-1.5 py-4 border border-primary text-lg font-medium bg-white text-primary cursor-pointer w-full md:w-40 "
             whileHover={{
               scale: 1.05,
             }}
@@ -84,7 +84,7 @@ const ProductInfo = ({ product }: { product: IProducts }) => {
             Add to Cart
           </motion.button>
           <motion.button
-            className="px-1.5 py-4 text-lg font-medium text-white bg-primary cursor-pointer w-36 md:w-52"
+            className="px-1.5 py-4 text-lg font-medium text-white bg-primary cursor-pointer w-full md:w-40"
             onClick={handleBuyNow}
             whileHover={{
               scale: 1.05,

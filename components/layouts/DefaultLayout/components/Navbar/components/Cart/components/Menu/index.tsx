@@ -60,7 +60,7 @@ export const Menu = ({ toggleOpen }) => {
   return (
     <>
       <motion.div
-        className="z-20 absolute top-0 right-0 bottom-0 w-[400px] h-screen bg-white"
+        className="z-20 absolute top-0 right-0 bottom-0 w-[400px] h-[80vh] sm:h-screen bg-white"
         custom={{ height }}
         variants={sidebar}
       />
@@ -70,7 +70,7 @@ export const Menu = ({ toggleOpen }) => {
         onClick={() => toggleOpen()}
       />
       <motion.div
-        className="flex flex-col justify-between h-screen z-30 absolute right-0 w-[400px] p-6 pt-14 overflow-y-auto"
+        className="flex flex-col justify-between h-[80vh] sm:h-screen z-30 absolute right-0 w-[400px] p-6 pt-14 overflow-y-auto"
         variants={variants}
       >
         {hasCart ? <Cards /> : <Empty />}

@@ -1,8 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
+import React, { useState } from "react";
 import { GetStaticProps } from "next";
 import { IProducts } from "@/types/Home";
-import { client } from "../../lib/client";
+import { client } from "@/lib/client";
 import { ParsedUrlQuery } from "querystring";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import ProductCard from "@/components/shared/ProductCard";
 import ProductImages from "@/components/pages/Products/components/ProductImages";
 import ProductInfo from "@/components/pages/Products/components/ProductInfo";
@@ -10,6 +14,38 @@ import ProductInfo from "@/components/pages/Products/components/ProductInfo";
 interface IParams extends ParsedUrlQuery {
   slug: string;
 }
+
+const settings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 5,
+  slidesToScroll: 5,
+  initialSlide: 0,
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 4,
+        slidesToScroll: 4,
+      },
+    },
+    {
+      breakpoint: 600,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 3,
+      },
+    },
+    {
+      breakpoint: 480,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 2,
+      },
+    },
+  ],
+};
 
 const ProductDetails = ({
   product,
@@ -20,18 +56,22 @@ const ProductDetails = ({
 }) => {
   const { image } = product;
   return (
-    <div>
-      <div className="flex gap-10 m-10 mt-16 text-tertiary flex-wrap md:flex-nowrap">
+    <div className="sm:px-6 sm:pt-5">
+      <div className="flex text-tertiary flex-col md:flex-row md:gap-10">
         <ProductImages images={image} />
         <ProductInfo product={product} />
       </div>
 
-      <div className="mt-28">
-        <h2 className="text-center m-7 text-tertiary">You may also like</h2>
-        <div className="flex justify-center gap-4 mt-5">
-          {products.map((item) => (
-            <ProductCard key={item.slug.current} product={item} />
-          ))}
+      <div className="mt-5 md:mt-5 overflow-hidden">
+        <h2 className="text-center my-2 md:m-7 text-tertiary">
+          You may also like
+        </h2>
+        <div className="px-2">
+          <Slider {...settings}>
+            {products.map((item) => (
+              <ProductCard key={item.slug.current} product={item} />
+            ))}
+          </Slider>
         </div>
       </div>
     </div>

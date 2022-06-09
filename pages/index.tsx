@@ -17,7 +17,7 @@ const Home = ({
     <>
       <HeroBanner data={banner} />
       <Header />
-      <div className="flex flex-wrap justify-center gap-5 mt-5">
+      <div className="grid grid-cols-2 md:px-6 px-2 gap-3 md:gap-5 mt-5 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
         {products?.map((product) => (
           <ProductCard key={product.slug.current} product={product} />
         ))}

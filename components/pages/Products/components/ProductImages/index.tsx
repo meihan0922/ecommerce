@@ -7,24 +7,21 @@ const ProductImages = ({ images }) => {
   const [index, setIndex] = useState(0);
 
   return (
-    <div className="w-[350px] h-[350px] md:w-[400px] md:h-[400px]">
+    <div className="w-full h-full md:max-w-md">
       <img
         alt="image for item"
         src={urlFor(images && images[index])}
-        className="rounded-2xl bg-disable w-full ease-in-out duration-300 "
+        className="sm:rounded-2xl bg-disable w-full ease-in-out duration-300 "
       />
-      <div className="flex gap-2.5 mt-5">
+      <div className="grid grid-cols-5 gap-2 p-2.5 pb-4 md:gap-2.5 md:mt-2 md:p-0">
         {images?.map((item, i) => (
           <img
             alt="image for item"
             key={i}
             src={urlFor(item)}
-            className={cx(
-              "rounded-lg bg-disable w-[70px] h-[70px] cursor-pointer",
-              {
-                "bg-primary": i === index,
-              }
-            )}
+            className={cx("rounded-lg bg-disable cursor-pointer", {
+              "bg-primary": i === index,
+            })}
             onMouseEnter={() => setIndex(i)}
           />
         ))}

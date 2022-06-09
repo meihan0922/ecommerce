@@ -50,7 +50,7 @@ const MenuItem = ({ id }: { id: string }) => {
               >
                 <AiOutlineMinus size={14} />
               </button>
-              <span className="px-3.5">{cartItems.qty}</span>
+              <span className="px-3.5">{cartItems.quantity}</span>
               <button
                 className="px-2 py-2 border-l border-l-disable text-primary"
                 onClick={() => updateQty(cartItems._id, "add")}
